@@ -1,55 +1,90 @@
 /** @jsxImportSource @emotion/react */
 import { FC } from "react";
 import { css } from '@emotion/react';
-import TableCell from "./TableCell";
-import { useState } from 'react';
-import TableCol from "./TableCol";
-import TableColGroup from "./TableColGroup";
-import TableRow from "./TableRow";
+import { useEffect } from 'react';
+import { ResizeControl, Td } from "./StyledComponents";
 
 const Table: FC = () => {
-  const [ cellWidth, setCellWidth ] = useState<number>(300/3);
-  const [ cellWidth2, setCellWidth2 ] = useState<number>(300/3);
-  const [ cellWidth3, setCellWidth3 ] = useState<number>(300/3);
-
-  const changeCellWidth = (id: string, cellWidth: number) => {
-    let dom = document.getElementById("table");
-    if(!dom) return;
-    let currentNode = dom.childNodes[0].childNodes[Number(id)-1] as Element;
-    let nextNode = dom.childNodes[0].childNodes[Number(id)] as Element;
-
-    currentNode.setAttribute("width", `${cellWidth}px`);
-    nextNode.setAttribute("width", `${200 - cellWidth}px`);
-    setCellWidth(cellWidth);
-    setCellWidth2(200 - cellWidth);
+  const resizableTable = (id: string, clientX: number) => {
+    const table = document.getElementById("table");
+    if(!table) return;
+    console.log(table.offsetLeft)
+    for(let i=1; i<=2; i++) {
+      const node = table.childNodes[0].childNodes[i-1].childNodes[Number(id)-1] as HTMLElement;
+      const nextNode = table.childNodes[0].childNodes[i-1].childNodes[Number(id)] as HTMLElement;
+      // node.style.width = 
+    }
   };
-
+  useEffect(() => {});
   return (
     <table
       id="table"
       border={1}
       css={css`
         border-collapse: collapse;
+        table-layout: fixed;
         margin: 50px auto;
+        box-sizing: border-box;
         width: 300px;
+        height: 100px;
       `}
     >
-      <TableColGroup>
-        <TableCol id="1" width={cellWidth} />
-        <TableCol id="2" width={cellWidth2} />
-        <TableCol id="3" width={cellWidth3} />
-      </TableColGroup>
       <tbody>
-        <TableRow>
-          <TableCell id="1" tableWidth={300} cellWidth={cellWidth} changeCellWidth={changeCellWidth}/>
-          <TableCell id="2" tableWidth={300} cellWidth={cellWidth} changeCellWidth={changeCellWidth}/>
-          <TableCell id="3" tableWidth={300} cellWidth={cellWidth} changeCellWidth={changeCellWidth}/>
-        </TableRow>
-        <TableRow>
-          <TableCell id="1" tableWidth={300} cellWidth={cellWidth} changeCellWidth={changeCellWidth}/>
-          <TableCell id="2" tableWidth={300} cellWidth={cellWidth} changeCellWidth={changeCellWidth}/>
-          <TableCell id="3" tableWidth={300} cellWidth={cellWidth} changeCellWidth={changeCellWidth}/>
-        </TableRow> 
+        <tr id="1">
+          <Td id="1">
+            <ResizeControl
+              onMouseDown={e => {
+                e.preventDefault();
+                resizableTable("1", e.clientX);
+              }}
+              onMouseMove={e => {
+                  
+              }}
+            />
+          </Td>
+          <Td id="2">
+            <ResizeControl 
+              onMouseDown={e => {
+                e.preventDefault();
+                resizableTable("2", e.clientX);
+              }}
+            />
+          </Td>
+          <Td id="3">
+            <ResizeControl 
+              onMouseDown={e => {
+                e.preventDefault();
+                resizableTable("3", e.clientX);
+              }}
+            />
+          </Td>
+        </tr>
+        <tr id="2">
+          <Td id="1">
+            <ResizeControl 
+              onMouseDown={e => {
+                e.preventDefault();
+                resizableTable("1", e.clientX);
+              }}
+            />
+          </Td>
+          <Td id="2">
+            <ResizeControl 
+              onMouseDown={e => {
+                e.preventDefault();
+                resizableTable("2", e.clientX);
+              }}
+            />
+          </Td>
+          <Td id="3">
+            <ResizeControl 
+              onMouseDown={e => {
+                e.preventDefault();
+                resizableTable("3", e.clientX);
+              }}
+            />
+          </Td>
+        </tr>
       </tbody>
     </table>
   )
